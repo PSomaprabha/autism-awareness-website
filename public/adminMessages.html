@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Messages</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #eaf4fc, #ffffff);
+      margin: 0;
+      padding: 30px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #004080;
+      margin-bottom: 30px;
+      font-size: 32px;
+    }
+
+    .message-box {
+      background: #ffffff;
+      border-left: 6px solid #007acc;
+      border-radius: 12px;
+      padding: 25px 20px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      margin-bottom: 25px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    .message-box p {
+      margin: 10px 0;
+      font-size: 15.5px;
+      color: #333;
+    }
+
+    .message-box strong {
+      color: #005080;
+    }
+
+    .reply-form {
+      margin-top: 15px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 12px;
+      font-size: 15px;
+      resize: vertical;
+      background-color: #fdfdfd;
+      transition: border-color 0.3s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #007acc;
+      box-shadow: 0 0 3px rgba(0, 122, 204, 0.2);
+    }
+
+    button {
+      background-color: #007acc;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #005f99;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .message-box {
+        padding: 20px 15px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+    .back-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: #5a6268;
+}
+
+  </style>
+</head>
+<body>
+
+  <h1>📬 Messages from Users</h1>
+  <div id="messageContainer">Loading messages...</div>
+<button onclick="goBack()" class="back-btn">⬅️ Back to Dashboard</button>
+
+  <script>
+    fetch('/api/contact')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('messageContainer');
+        if (!data.length) {
+          container.innerHTML = "<p>No messages found.</p>";
+        } else {
+          container.innerHTML = "";
+          data.forEach(msg => {
+            const box = document.createElement('div');
+            box.className = "message-box";
+            box.innerHTML = `
+              <p><strong>Name:</strong> ${msg.name}</p>
+              <p><strong>Email:</strong> ${msg.email}</p>
+              <p><strong>Message:</strong><br>${msg.message}</p>
+              ${msg.replied ? `
+                <p><strong>Status:</strong> ✅ Replied</p>
+                <p><strong>Reply:</strong> ${msg.reply}</p>` : `
+                <form class="reply-form">
+                  <textarea placeholder="Write your reply..." required></textarea>
+                  <button type="submit">Send Reply</button>
+                </form>
+              `}
+            `;
+
+            if (!msg.replied) {
+              const form = box.querySelector('.reply-form');
+              form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const replyText = form.querySelector('textarea').value;
+
+                fetch(`/api/contact/${msg._id}/reply`, {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ reply: replyText })
+                })
+                .then(res => res.json())
+                .then(response => {
+                  alert("✅ Reply sent and email delivered!");
+                  window.location.reload();
+                })
+                .catch(err => {
+                  console.error("❌ Failed to send reply:", err);
+                  alert("Something went wrong. Please try again.");
+                });
+              });
+            }
+
+            container.appendChild(box);
+          });
+        }
+      })
+      .catch(err => {
+        console.error("Error fetching messages:", err);
+        document.getElementById('messageContainer').innerHTML = "<p>Failed to load messages.</p>";
+      });
+      function goBack() {
+  window.location.href = 'admindashboard.html';
+}
+
+  </script>
+
+</body>
+</html>

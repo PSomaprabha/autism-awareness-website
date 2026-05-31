@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - Autism Results</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      padding: 40px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: #2c3e50;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #999;
+      padding: 20px;
+    }
+
+    .delete-btn {
+      padding: 6px 12px;
+      border: none;
+      background-color: #e74c3c;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+    .toggle-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 20px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.toggle-btn:hover {
+  background-color: #2980b9;
+}.back-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: #5a6268;
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Admin Dashboard - Quiz Results</h1>
+
+    <input type="text" id="searchInput" placeholder="Search by name or autism type..." style="margin-bottom: 20px; padding: 10px; width: 100%; border-radius: 6px; border: 1px solid #ccc;" />
+
+    <table id="resultsTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Score</th>
+          <th>Autism Type</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="6" class="no-data">Loading results...</td></tr>
+      </tbody>
+    </table>
+    <div class="analytics-container">
+  <button onclick="toggleCharts()" class="toggle-btn">📊 Show Analytics</button>
+
+  <div id="chartsSection" style="display: none; margin-top: 30px;">
+    <h2>Autism Type Distribution</h2>
+    <canvas id="autismTypeChart" width="150" height="70"></canvas>
+
+    <h2>Age Group Distribution</h2>
+    <canvas id="ageGroupChart" width="250" height="100"></canvas>
+  </div>
+</div>
+
+  </div>
+<button onclick="goBack()" class="back-btn">⬅️ Back to Dashboard</button>
+
+  <script>
+    let allResults = [];
+
+    fetch('/api/results')
+      .then(res => res.json())
+      .then(data => {
+        allResults = data;
+        renderTable(data);
+        renderCharts(data);
+        console.log("Rendering table with data:", data);
+      })
+      .catch(err => {
+        console.error('Error fetching results:', err);
+        document.querySelector('#resultsTable tbody').innerHTML =
+          '<tr><td colspan="6" class="no-data">Error loading results</td></tr>';
+      });
+
+    function renderTable(data) {
+      const tableBody = document.querySelector('#resultsTable tbody');
+      if (!data || data.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="6" class="no-data">No results found</td></tr>';
+        return;
+      }
+
+      tableBody.innerHTML = '';
+      data.forEach(result => {
+        const row = `
+          <tr data-id="${result._id}">
+            <td>${result.name}</td>
+            <td>${result.age}</td>
+            <td>${result.score}</td>
+            <td>${result.autismType}</td>
+            <td>${new Date(result.date).toLocaleString()}</td>
+            <td><button class="delete-btn">Delete</button></td>
+          </tr>
+        `;
+        tableBody.innerHTML += row;
+      });
+
+      // ✅ Add delete button handler here
+      document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function () {
+          const row = this.closest('tr');
+          const id = row.getAttribute('data-id');
+          console.log("Trying to delete ID:", id);
+          if (confirm('Are you sure you want to delete this result?')) {
+            fetch(`/api/results/${id}`, {
+              method: 'DELETE',
+            })
+              .then(res => res.json())
+              .then(response => {
+                console.log("Delete response:", response);
+                if (response.success) {
+                  alert('Result deleted');
+                  row.remove(); // remove row from table
+                } else {
+                  alert('Failed to delete');
+                }
+              });
+          }
+        });
+      });
+    }
+
+    // ✅ Search filter listener
+    document.getElementById('searchInput').addEventListener('input', function () {
+      const keyword = this.value.toLowerCase();
+      const filtered = allResults.filter(r =>
+        r.name.toLowerCase().includes(keyword) || r.autismType.toLowerCase().includes(keyword)
+      );
+      renderTable(filtered);
+    });
+    function toggleCharts() {
+  const section = document.getElementById("chartsSection");
+  const button = document.querySelector(".toggle-btn");
+
+  if (section.style.display === "none") {
+    section.style.display = "block";
+    button.textContent = "📉 Hide Analytics";
+  } else {
+    section.style.display = "none";
+    button.textContent = "📊 Show Analytics";
+  }
+}
+
+    function renderCharts(data) {
+  // 🧮 Count autism types
+  const typeCounts = {
+    "Severe Autism": 0,
+    "Moderate Autism": 0,
+    "Mild Autism": 0,
+    "No significant signs": 0
+  };
+
+  const ageGroups = {
+    "0-5": 0,
+    "6-12": 0,
+    "13-18": 0,
+    "19-25": 0,
+    "26+": 0
+  };
+
+  data.forEach(result => {
+    typeCounts[result.autismType] = (typeCounts[result.autismType] || 0) + 1;
+
+    const age = result.age;
+    if (age <= 5) ageGroups["0-5"]++;
+    else if (age <= 12) ageGroups["6-12"]++;
+    else if (age <= 18) ageGroups["13-18"]++;
+    else if (age <= 25) ageGroups["19-25"]++;
+    else ageGroups["26+"]++;
+  });
+
+  // 📊 Chart 1: Autism Types
+  new Chart(document.getElementById('autismTypeChart'), {
+    type: 'pie',
+    data: {
+      labels: Object.keys(typeCounts),
+      datasets: [{
+        label: 'Autism Types',
+        data: Object.values(typeCounts),
+        backgroundColor: ['#ff6b6b', '#ffa502', '#1e90ff', '#2ed573'],
+      }]
+    }
+  });
+
+  // 📊 Chart 2: Age Groups
+  new Chart(document.getElementById('ageGroupChart'), {
+    type: 'bar',
+    data: {
+      labels: Object.keys(ageGroups),
+      datasets: [{
+        label: 'Age Group Counts',
+        data: Object.values(ageGroups),
+        backgroundColor: '#70a1ff',
+      }]
+    },
+    options: {
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+}
+function goBack() {
+  window.location.href = 'admindashboard.html';
+}
+
+  </script>
+  <!-- Load Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+</html>

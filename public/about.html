@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Autism</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f8fb;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+    header {
+        background: #005f99;
+        color: white;
+        padding: 20px;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .container {
+        width: 90%;
+        max-width: 1100px;
+        margin: auto;
+        padding: 20px;
+    }
+    h2 {
+        color: #005f99;
+        margin-top: 30px;
+    }
+    p {
+        font-size: 18px;
+        line-height: 1.6;
+        color: #333;
+    }
+
+    /* Autism Types Cards */
+    .types-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+    .type-card {
+        background: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        width: 300px;
+        padding: 20px;
+        transition: transform 0.3s;
+    }
+    .type-card:hover {
+        transform: scale(1.05);
+    }
+    .type-card h3 {
+        color: #005f99;
+        margin-bottom: 10px;
+    }
+    .type-card p {
+        font-size: 16px;
+        color: #444;
+    }
+
+    /* Dropdown */
+    select {
+        padding: 10px;
+        font-size: 16px;
+        margin: 15px;
+        border-radius: 5px;
+        border: 1px solid #005f99;
+    }
+
+    /* Video Section */
+    .video-section {
+        display: none;
+        margin: 20px 0;
+    }
+    .video-section h3 {
+        color: #005f99;
+        margin-bottom: 10px;
+    }
+    iframe {
+        width: 80%;
+        height: 300px;
+        border-radius: 10px;
+        border: none;
+        margin-bottom: 20px;
+    }
+</style>
+</head>
+<body>
+
+<header>About Autism Awareness</header>
+
+<div class="container">
+    <!-- About Autism -->
+    <h2>What is Autism?</h2>
+    <p>Autism Spectrum Disorder (ASD) is a developmental condition that affects how a person communicates, interacts, and behaves. 
+    It is called a "spectrum" because it affects individuals differently, ranging from mild to severe. 
+    Early diagnosis and therapy can significantly improve the quality of life for individuals with autism.</p>
+
+    <!-- Types of Autism -->
+    <h2>Levels of Autism</h2>
+    <div class="types-container">
+        <div class="type-card">
+            <h3>Mild Autism</h3>
+            <p>Individuals may have slight difficulties with social interactions and may exhibit repetitive behaviors, 
+            but they can lead independent lives with minimal support.</p>
+        </div>
+        <div class="type-card">
+            <h3>Moderate Autism</h3>
+            <p>People may struggle more with communication and daily activities, requiring structured support and therapies 
+            to improve social and adaptive skills.</p>
+        </div>
+        <div class="type-card">
+            <h3>Severe Autism</h3>
+            <p>Individuals may face significant challenges with speech, understanding, and self-care, needing lifelong support 
+            and intensive interventions.</p>
+        </div>
+    </div>
+
+    <!-- Language Dropdown for Videos -->
+    <h2>Watch Autism Awareness Videos</h2>
+    <p>Select your preferred language to watch awareness videos:</p>
+    <select id="languageSelect">
+        <option value="">-- Select Language --</option>
+        <option value="telugu">Telugu</option>
+        <option value="english">English</option>
+        <option value="hindi">Hindi</option>
+        <option value="all">Show All</option>
+    </select>
+
+    <!-- Telugu Videos -->
+    <div class="video-section" id="telugu">
+        <h3>Telugu Autism Awareness Video</h3>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/9WnMuzMDfR8?si=koVp4i9QguohSmdv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/u1l_GtiaYA0?si=DTypCTEwjQiOCnoS" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+
+    <!-- English Videos -->
+    <div class="video-section" id="english">
+        <h3>English Autism Awareness Video</h3>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/d2mlWUzA0B4?si=uLON83hHJ2N3O43z" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/0idZghw97dc?si=tP6oRLWbUsXd618X" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/H-ur4bSw0f0?si=XoqEivCubAvmVHGQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+
+    <!-- Hindi Videos -->
+    <div class="video-section" id="hindi">
+        <h3>Hindi Autism Awareness Video</h3>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/Lez6uiD5IPs?si=YIT9tBAXmoe3iC5z" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/plM5Hp5uyLs?si=ntRE6EH_sIFijSTH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+         <iframe width="560" height="315" src="https://www.youtube.com/embed/P5M-VPjRCgE?si=vgCM3CvTvXY5OYuC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+</div>
+<div style="position: absolute; top: 32px; right: 32px; z-index: 10; display: flex; gap: 12px;">
+    <a href="index.html" class="btn" style="background:linear-gradient(to right,#0055ff,#007acc); min-width:180px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"> Go Back</a>
+  </div>
+
+<script>
+    document.getElementById('languageSelect').addEventListener('change', function() {
+        const sections = document.querySelectorAll('.video-section');
+        sections.forEach(sec => sec.style.display = 'none');
+        const lang = this.value;
+        if (lang === 'all') {
+            sections.forEach(sec => sec.style.display = 'block');
+        } else if (lang) {
+            document.getElementById(lang).style.display = 'block';
+        }
+    });
+</script>
+
+</body>
+</html>
