@@ -166,3 +166,7 @@ This project is created for educational and community service purposes.
 Soma Prabha
 
 GitHub: https://github.com/PSomaprabha
+
+## 🌐 Live Demo
+
+[Visit Website](https://autism-awareness-website.onrender.com)
